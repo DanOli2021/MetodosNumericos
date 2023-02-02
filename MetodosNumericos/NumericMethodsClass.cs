@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
+// Clase que contiene los métodos numéricos
 public static class NumericMethodsClass
 {
     // Bisection method
-    // 
+    // Este metodo es un algoritmo de busqueda de raices
+    // de una funcion continua en un intervalo dado.
+    // El metodo de biseccion divide el intervalo a la mitad
+    // y evalua la funcion en el punto medio. Si el valor de la funcion
+    // en el punto medio es cero, entonces el punto medio es la raiz.
+    // Si el valor de la funcion en el punto medio es distinto de cero,
+    // entonces el intervalo se divide en dos partes y se repite el proceso
+    // hasta que se encuentre la raiz o se alcance el numero maximo de iteraciones.
+    // El metodo de biseccion es un metodo lento, pero es muy estable.    
     public static string Bisection(double x1, double x2, int iterations, double tolerance)
     {
 
@@ -60,6 +62,14 @@ public static class NumericMethodsClass
 
 
 
+    // False position method
+    // Este metodo es un algoritmo de busqueda de raices
+    // de una funcion continua en un intervalo dado.
+    // El metodo de falsa posicion es similar al metodo de biseccion,
+    // pero en vez de dividir el intervalo a la mitad, se calcula el punto medio
+    // de la recta que une los puntos (x1, f(x1)) y (x2, f(x2)).
+    // El metodo de falsa posicion es mas rapido que el metodo de biseccion,
+    // pero es menos estable.
     public static string FalsePosition(double x1, double x2, int iterations, double tolerance) 
     {
 
@@ -109,6 +119,13 @@ public static class NumericMethodsClass
 
 
     // Newton-Raphson in C#
+    // Este metodo es un algoritmo de busqueda de raices
+    // de una funcion continua en un intervalo dado.
+    // El metodo de Newton-Raphson es un metodo iterativo
+    // que utiliza la derivada de la funcion para aproximar
+    // la raiz de la funcion.
+    // El metodo de Newton-Raphson es mas rapido que el metodo de biseccion,
+    // pero es menos estable.
     public static string NewtonRaphson(double x0, int iterations, double tolerance)
     {
 
@@ -144,6 +161,13 @@ public static class NumericMethodsClass
 
 
     // Secant Method in c#
+    // Este metodo es un algoritmo de busqueda de raices
+    // de una funcion continua en un intervalo dado.
+    // El metodo de la secante es un metodo iterativo
+    // que utiliza la derivada de la funcion para aproximar
+    // la raiz de la funcion.
+    // El metodo de la secante es mas rapido que el metodo de biseccion,
+    // pero es menos estable.
     public static string Secant(double x0, double x1, int iterations, double tolerance)
     {
 
@@ -178,8 +202,10 @@ public static class NumericMethodsClass
     }
 
 
-    
-    
+
+    // Test function
+    // Esta funcion es la funcion que se va a evaluar
+    // para encontrar sus raices.    
     public static double TestFunction(double x)
     {
         // return -4x^3 + 6x^2 + 2x
@@ -189,12 +215,20 @@ public static class NumericMethodsClass
         //return Math.Pow(x, 3) - (2 * Math.Pow(x, 2)) + 1;
     }
 
+
+    // Test function derivative
+    // Esta funcion es la derivada de la funcion que se va a evaluar
+    // para encontrar sus raices.    
     public static double TestFunctionDerivative(double x)
     {
         // return -12x^2 + 12x + 2
         return (-12 * Math.Pow(x, 2)) + (12 * x) + 2;
     }
 
+
+    // NumericMethodsResult class
+    // Esta clase es la que se va a serializar en formato JSON
+    // para ser enviada al cliente.
     public class NumericMethodsResult 
     {
         public string message { get; set; } = "";

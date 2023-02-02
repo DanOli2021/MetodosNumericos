@@ -1,4 +1,7 @@
-﻿Console.WriteLine("Formula: -4x^3 + 6x^2 + 2x");
+﻿// Author: Daniel Oliver Rojas Escobar
+// Date: 2023-01-01
+// Description: Programa principal
+Console.WriteLine("Formula: -4x^3 + 6x^2 + 2x");
 Console.WriteLine();
 string result;
 Console.WriteLine("Método de bisección");
