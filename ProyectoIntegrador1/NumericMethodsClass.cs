@@ -8,6 +8,7 @@ public class NumericMethodsClass
 
 
     Dictionary<string, Script> functions = new Dictionary<string, Script>();
+    NumericMethodsResult r = new NumericMethodsResult();
 
     // Bisection method
     // Este metodo es un algoritmo de busqueda de raices
@@ -21,8 +22,6 @@ public class NumericMethodsClass
     // El metodo de biseccion es un metodo lento, pero es muy estable.    
     public string Bisection(string code, double x1, double x2, int iterations, double tolerance)
     {
-
-        NumericMethodsResult r = new NumericMethodsResult();
         DateTime init_time = DateTime.Now;
 
         if ((TestFunction(code, x1) * TestFunction(code, x2)) > 0)
@@ -40,7 +39,7 @@ public class NumericMethodsClass
 
             xm = (x1 + x2) / 2;
 
-            if (TestFunction(code, xm) == 0 || (x2 - x1) / 2 < tolerance)
+            if (Math.Abs(TestFunction(code, xm)) < tolerance)
             {
                 break;
             }
@@ -79,7 +78,6 @@ public class NumericMethodsClass
     public string FalsePosition(string code, double x1, double x2, int iterations, double tolerance) 
     {
 
-        NumericMethodsResult r = new NumericMethodsResult();
         DateTime init_time = DateTime.Now;
 
         if (TestFunction(code, x1) * TestFunction(code, x2) >= 0)
@@ -135,7 +133,6 @@ public class NumericMethodsClass
     public string NewtonRaphson(string code, string derivated_code, double x, int iterations, double tolerance)
     {
 
-        NumericMethodsResult r = new NumericMethodsResult();
         DateTime init_time = DateTime.Now;
 
         double x1 = 0;
@@ -177,7 +174,6 @@ public class NumericMethodsClass
     public string Secant(string code, double x0, double x1, int iterations, double tolerance)
     {
 
-        NumericMethodsResult r = new NumericMethodsResult();
         DateTime init_time = DateTime.Now;
 
         double x2 = 0;
@@ -214,11 +210,11 @@ public class NumericMethodsClass
     // para encontrar sus raices.    
     public double TestFunction(string code, double x)
     {
-        string result = Eval("TestFunction", "return " + code + ";", x);
+        string result = Eval("TestFunction", "return (" + code + ");", x);
 
         if (result.StartsWith("Error:"))
         {
-            Console.WriteLine(result);
+            r.fomula_error = result;
             return 0;
         }
 
@@ -231,11 +227,11 @@ public class NumericMethodsClass
     // para encontrar sus raices.    
     public double TestFunctionDerivative(string code, double x)
     {
-        string result = Eval("TestFunctionDerivative", "return " + code + ";", x);
+        string result = Eval("TestFunctionDerivative", "return (" + code + ");", x);
 
         if (result.StartsWith("Error:"))
         {
-            Console.WriteLine(result);
+            r.derivative_fomula_error = result;
             return 0;
         }
 
@@ -296,6 +292,8 @@ public class NumericMethodsClass
     public class NumericMethodsResult 
     {
         public string message { get; set; } = "";
+        public string fomula_error { get; set; } = "";
+        public string derivative_fomula_error { get; set; } = "";
         public double result { get; set; } = 0;
         public int iterations { get; set; } = 0;
         public double delay { get; set; } = 0;
