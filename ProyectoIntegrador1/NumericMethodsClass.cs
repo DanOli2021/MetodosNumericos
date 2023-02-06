@@ -8,7 +8,7 @@ public class NumericMethodsClass
 
 
     Dictionary<string, Script> functions = new Dictionary<string, Script>();
-    NumericMethodsResult r = new NumericMethodsResult();
+    NumericMethodsResult r;
 
     // Bisection method
     // Este metodo es un algoritmo de busqueda de raices
@@ -23,6 +23,7 @@ public class NumericMethodsClass
     public string Bisection(string code, double x1, double x2, int iterations, double tolerance)
     {
         DateTime init_time = DateTime.Now;
+        r = new NumericMethodsResult();
 
         if ((TestFunction(code, x1) * TestFunction(code, x2)) > 0)
         {
@@ -35,9 +36,10 @@ public class NumericMethodsClass
         for (int i = 0; i < iterations; i++)
         {
 
-            r.iterations = i;
+            r.iterations = i + 1;
 
             xm = (x1 + x2) / 2;
+            r.iteration_results.Add(xm);
 
             if (Math.Abs(TestFunction(code, xm)) < tolerance)
             {
@@ -79,6 +81,7 @@ public class NumericMethodsClass
     {
 
         DateTime init_time = DateTime.Now;
+        r = new NumericMethodsResult();
 
         if (TestFunction(code, x1) * TestFunction(code, x2) >= 0)
         {
@@ -94,6 +97,7 @@ public class NumericMethodsClass
             r.iterations = i;
 
             xm = (x1 * TestFunction(code, x2) - x2 * TestFunction(code, x1)) / (TestFunction(code, x2) - TestFunction(code, x1));
+            r.iteration_results.Add(xm);
 
             if (TestFunction(code, xm) <= tolerance)
             {
@@ -132,16 +136,17 @@ public class NumericMethodsClass
     // pero es menos estable.
     public string NewtonRaphson(string code, string derivated_code, double x, int iterations, double tolerance)
     {
-
+        r = new NumericMethodsResult();
         DateTime init_time = DateTime.Now;
 
         double x1 = 0;
 
         for (int i = 0; i < iterations; i++)
         {
-            r.iterations = i;
+            r.iterations = i + 1;
 
             x1 = x - (TestFunction(code, x) / TestFunctionDerivative(derivated_code, x));
+            r.iteration_results.Add(x1);
 
             if (Math.Abs(x1 - x) <= tolerance)
             {
@@ -175,14 +180,17 @@ public class NumericMethodsClass
     {
 
         DateTime init_time = DateTime.Now;
+        r = new NumericMethodsResult();
 
         double x2 = 0;
 
         for (int i = 0; i < iterations; i++)
         {
-            r.iterations = i;
+            r.iterations = i + 1;
 
             x2 = x1 - (TestFunction(code, x1) * (x1 - x0)) / (TestFunction(code, x1) - TestFunction(code, x0));
+
+            r.iteration_results.Add(x2);
 
             if (Math.Abs(x2 - x1) <= tolerance)
             {
@@ -191,6 +199,12 @@ public class NumericMethodsClass
 
             x0 = x1;
             x1 = x2;
+
+            if( i == iterations - 1)
+            {
+                break;
+            }
+
         }
 
         DateTime end_time = DateTime.Now;
@@ -295,6 +309,7 @@ public class NumericMethodsClass
         public string fomula_error { get; set; } = "";
         public string derivative_fomula_error { get; set; } = "";
         public double result { get; set; } = 0;
+        public List<double> iteration_results { get; set; } = new List<double>();
         public int iterations { get; set; } = 0;
         public double delay { get; set; } = 0;
     }    

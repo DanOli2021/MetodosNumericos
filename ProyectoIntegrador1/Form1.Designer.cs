@@ -43,6 +43,8 @@
             this.txtResultados = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textDerivatedFormula = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -150,7 +152,7 @@
             this.button1.Font = new System.Drawing.Font("Arial Black", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button1.Location = new System.Drawing.Point(613, 106);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(329, 150);
+            this.button1.Size = new System.Drawing.Size(329, 72);
             this.button1.TabIndex = 5;
             this.button1.Text = "Método de bisección";
             this.button1.UseVisualStyleBackColor = true;
@@ -161,7 +163,7 @@
             this.button2.Font = new System.Drawing.Font("Arial Black", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button2.Location = new System.Drawing.Point(948, 106);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(329, 150);
+            this.button2.Size = new System.Drawing.Size(329, 72);
             this.button2.TabIndex = 6;
             this.button2.Text = "Newton-Raphson ";
             this.button2.UseVisualStyleBackColor = true;
@@ -200,11 +202,35 @@
             this.textDerivatedFormula.TabIndex = 10;
             this.textDerivatedFormula.Text = "(-12 * Math.Pow(x, 2)) + (12 * x) + 2";
             // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Arial Black", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button3.Location = new System.Drawing.Point(613, 186);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(329, 70);
+            this.button3.TabIndex = 11;
+            this.button3.Text = "Método de la secante";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Font = new System.Drawing.Font("Arial Black", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button4.Location = new System.Drawing.Point(948, 184);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(329, 70);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "Método de la Falsa posición";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1298, 773);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.textDerivatedFormula);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtResultados);
@@ -246,5 +272,7 @@
         private TextBox txtResultados;
         private Label label6;
         private TextBox textDerivatedFormula;
+        private Button button3;
+        private Button button4;
     }
 }
