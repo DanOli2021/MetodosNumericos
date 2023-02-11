@@ -235,6 +235,7 @@ public class NumericMethodsClass
         return Convert.ToDouble(result);
     }
 
+    
 
     // Test function derivative
     // Esta funcion es la derivada de la funcion que se va a evaluar
