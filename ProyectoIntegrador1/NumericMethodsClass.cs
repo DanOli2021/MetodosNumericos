@@ -1,6 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using Newtonsoft.Json;
 using Microsoft.CodeAnalysis.Scripting;
-using Newtonsoft.Json;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 
 // Clase que contiene los métodos numéricos
 public class NumericMethodsClass
@@ -8,7 +8,7 @@ public class NumericMethodsClass
 
 
     Dictionary<string, Script> functions = new Dictionary<string, Script>();
-    NumericMethodsResult r;
+    NumericMethodsResult r = new NumericMethodsResult();
 
     // Bisection method
     // Este metodo es un algoritmo de busqueda de raices
@@ -23,7 +23,6 @@ public class NumericMethodsClass
     public string Bisection(string code, double x1, double x2, int iterations, double tolerance)
     {
         DateTime init_time = DateTime.Now;
-        r = new NumericMethodsResult();
 
         if ((TestFunction(code, x1) * TestFunction(code, x2)) > 0)
         {
@@ -36,17 +35,16 @@ public class NumericMethodsClass
         for (int i = 0; i < iterations; i++)
         {
 
-            r.iterations = i + 1;
+            r.iterations = i;
 
             xm = (x1 + x2) / 2;
-            r.iteration_results.Add(xm);
 
             if (Math.Abs(TestFunction(code, xm)) < tolerance)
             {
                 break;
             }
 
-            if( TestFunction(code, xm) * TestFunction(code, x1) < 0) 
+            if (TestFunction(code, xm) * TestFunction(code, x1) < 0)
             {
                 x2 = xm;
             }
@@ -77,11 +75,10 @@ public class NumericMethodsClass
     // de la recta que une los puntos (x1, f(x1)) y (x2, f(x2)).
     // El metodo de falsa posicion es mas rapido que el metodo de biseccion,
     // pero es menos estable.
-    public string FalsePosition(string code, double x1, double x2, int iterations, double tolerance) 
+    public string FalsePosition(string code, double x1, double x2, int iterations, double tolerance)
     {
 
         DateTime init_time = DateTime.Now;
-        r = new NumericMethodsResult();
 
         if (TestFunction(code, x1) * TestFunction(code, x2) >= 0)
         {
@@ -93,11 +90,10 @@ public class NumericMethodsClass
 
         for (int i = 0; i < iterations; i++)
         {
-            
+
             r.iterations = i;
 
             xm = (x1 * TestFunction(code, x2) - x2 * TestFunction(code, x1)) / (TestFunction(code, x2) - TestFunction(code, x1));
-            r.iteration_results.Add(xm);
 
             if (TestFunction(code, xm) <= tolerance)
             {
@@ -136,17 +132,16 @@ public class NumericMethodsClass
     // pero es menos estable.
     public string NewtonRaphson(string code, string derivated_code, double x, int iterations, double tolerance)
     {
-        r = new NumericMethodsResult();
+
         DateTime init_time = DateTime.Now;
 
         double x1 = 0;
 
         for (int i = 0; i < iterations; i++)
         {
-            r.iterations = i + 1;
+            r.iterations = i;
 
             x1 = x - (TestFunction(code, x) / TestFunctionDerivative(derivated_code, x));
-            r.iteration_results.Add(x1);
 
             if (Math.Abs(x1 - x) <= tolerance)
             {
@@ -180,17 +175,14 @@ public class NumericMethodsClass
     {
 
         DateTime init_time = DateTime.Now;
-        r = new NumericMethodsResult();
 
         double x2 = 0;
 
         for (int i = 0; i < iterations; i++)
         {
-            r.iterations = i + 1;
+            r.iterations = i;
 
             x2 = x1 - (TestFunction(code, x1) * (x1 - x0)) / (TestFunction(code, x1) - TestFunction(code, x0));
-
-            r.iteration_results.Add(x2);
 
             if (Math.Abs(x2 - x1) <= tolerance)
             {
@@ -199,12 +191,6 @@ public class NumericMethodsClass
 
             x0 = x1;
             x1 = x2;
-
-            if( i == iterations - 1)
-            {
-                break;
-            }
-
         }
 
         DateTime end_time = DateTime.Now;
@@ -235,7 +221,6 @@ public class NumericMethodsClass
         return Convert.ToDouble(result);
     }
 
-    
 
     // Test function derivative
     // Esta funcion es la derivada de la funcion que se va a evaluar
@@ -262,13 +247,13 @@ public class NumericMethodsClass
             g.x = x;
             object o;
 
-            if (this.functions.ContainsKey(funtion_name)) 
+            if (this.functions.ContainsKey(funtion_name))
             {
                 o = functions[funtion_name].RunAsync(g).GetAwaiter().GetResult().ReturnValue;
 
                 if (o != null)
                 {
-                    return o.ToString();
+                    return "" + o.ToString();
                 }
 
                 return "";
@@ -286,7 +271,7 @@ public class NumericMethodsClass
 
             if (o != null)
             {
-                return o.ToString();
+                return "" + o.ToString();
             }
 
             return "";
@@ -304,17 +289,16 @@ public class NumericMethodsClass
     // NumericMethodsResult class
     // Esta clase es la que se va a serializar en formato JSON
     // para ser enviada al cliente.
-    public class NumericMethodsResult 
+    public class NumericMethodsResult
     {
         public string message { get; set; } = "";
         public string fomula_error { get; set; } = "";
         public string derivative_fomula_error { get; set; } = "";
         public double result { get; set; } = 0;
-        public List<double> iteration_results { get; set; } = new List<double>();
         public int iterations { get; set; } = 0;
         public double delay { get; set; } = 0;
-    }    
-    
+    }
+
 
 }
 public class Globals

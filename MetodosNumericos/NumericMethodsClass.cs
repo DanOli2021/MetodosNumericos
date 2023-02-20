@@ -1,6 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using Newtonsoft.Json;
 using Microsoft.CodeAnalysis.Scripting;
-using Newtonsoft.Json;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 
 // Clase que contiene los métodos numéricos
 public class NumericMethodsClass
@@ -253,7 +253,7 @@ public class NumericMethodsClass
 
                 if (o != null)
                 {
-                    return o.ToString();
+                    return "" + o.ToString();
                 }
 
                 return "";
@@ -271,7 +271,7 @@ public class NumericMethodsClass
 
             if (o != null)
             {
-                return o.ToString();
+                return "" + o.ToString();
             }
 
             return "";
