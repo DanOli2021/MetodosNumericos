@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProyectoIntegrador1", "Proy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArreglosMetodosNumericos", "ArreglosMetodosNumericos\ArreglosMetodosNumericos.csproj", "{484209E4-360F-4D5D-AAD1-4C6D64E54908}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lagrange", "Lagrange\Lagrange.csproj", "{95E83310-E1D0-40B3-847F-8B8D3BF06AC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lagrange", "Lagrange\Lagrange.csproj", "{95E83310-E1D0-40B3-847F-8B8D3BF06AC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegralesDerivaciones", "IntegralesDerivaciones\IntegralesDerivaciones.csproj", "{534E8E55-45CE-4A09-BE13-994A78EDBEAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{95E83310-E1D0-40B3-847F-8B8D3BF06AC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95E83310-E1D0-40B3-847F-8B8D3BF06AC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95E83310-E1D0-40B3-847F-8B8D3BF06AC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{534E8E55-45CE-4A09-BE13-994A78EDBEAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{534E8E55-45CE-4A09-BE13-994A78EDBEAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{534E8E55-45CE-4A09-BE13-994A78EDBEAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{534E8E55-45CE-4A09-BE13-994A78EDBEAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
