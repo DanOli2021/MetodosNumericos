@@ -28,5 +28,17 @@ namespace ProyectoIntegrador1
             f.Show();
 
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form3 f = new Form3();
+            f.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Form4 f = new Form4();
+            f.Show();
+        }
     }
 }

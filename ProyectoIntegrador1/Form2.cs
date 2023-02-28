@@ -26,9 +26,6 @@ namespace ProyectoIntegrador1
             CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
 
             InitializeComponent();
-            ConsoleWriter console1 = new ConsoleWriter(this.txtResultados);
-            Console.SetOut(console1);
-
 
         }
 
@@ -45,31 +42,31 @@ namespace ProyectoIntegrador1
         void ProcessCommand(string command)
         {
 
-            Console.WriteLine(command);
+            ConsoleWrite(command);
 
             string result = command;
 
             if (result.Trim().ToLower() == "help")
             {
-                Console.WriteLine("add <formula> - Add a formula to the system.");
-                Console.WriteLine("clear fomulas - Clear all formulas.");
-                Console.WriteLine("show formulas - Show all formulas.");
-                Console.WriteLine("show coefficients - Show the coefficients table.");
-                Console.WriteLine("analize <formula> - Analize a formula.");
-                Console.WriteLine("solve using jacobis - Solve the system using Jacobis method.");
-                Console.WriteLine("solve using gauss-seidel - Solve the system using Gauss-Seidel method.");
+                ConsoleWrite("add <formula> - Add a formula to the system.");
+                ConsoleWrite("clear fomulas - Clear all formulas.");
+                ConsoleWrite("show formulas - Show all formulas.");
+                ConsoleWrite("show coefficients - Show the coefficients table.");
+                ConsoleWrite("analize <formula> - Analize a formula.");
+                ConsoleWrite("solve using jacobis - Solve the system using Jacobis method.");
+                ConsoleWrite("solve using gauss-seidel - Solve the system using Gauss-Seidel method.");
                 return;
             }
 
             if (result.Trim().ToLower().StartsWith("solve using jacobis"))
             {
-                Console.WriteLine(g.SolveUsingJacobis());
+                ConsoleWrite(g.SolveUsingJacobis());
                 return;
             }
 
             if (result.Trim().ToLower().StartsWith("solve using gauss-seidel"))
             {
-                Console.WriteLine(g.SolveUsingGaussSeidel());
+                ConsoleWrite(g.SolveUsingGaussSeidel());
                 return;
             }
 
@@ -86,28 +83,28 @@ namespace ProyectoIntegrador1
 
                 Formula f = JsonConvert.DeserializeObject<Formula>(local_result);
                 g.AddFormula(f);
-                Console.WriteLine("Ok.");
+                ConsoleWrite("Ok.");
                 return;
             }
 
             if (result.Trim().ToLower().StartsWith("clear fomulas"))
             {
                 g.Formulas.Clear();
-                Console.WriteLine("Ok.");
+                ConsoleWrite("Ok.");
                 return;
             }
 
 
             if (result.Trim().ToLower().StartsWith("show coefficients"))
             {
-                Console.WriteLine(g.CreateCoeffientsTable());
+                ConsoleWrite(g.CreateCoeffientsTable());
                 return;
             }
 
 
             if (result.Trim().ToLower().StartsWith("show formulas"))
             {
-                Console.WriteLine(JsonConvert.SerializeObject(g.Formulas, Formatting.Indented));
+                ConsoleWrite(JsonConvert.SerializeObject(g.Formulas, Formatting.Indented));
                 return;
             }
 
@@ -117,17 +114,23 @@ namespace ProyectoIntegrador1
 
                 if (local_result.StartsWith("Error:"))
                 {
-                    Console.WriteLine(local_result);
+                    ConsoleWrite(local_result);
                     return;
                 }
 
-                Console.WriteLine(local_result);
+                ConsoleWrite(local_result);
                 return;
             }
 
 
-            Console.WriteLine("Comando desconocido");
+            ConsoleWrite("Comando desconocido");
 
+        }
+
+
+        private void ConsoleWrite(string result) 
+        {
+            this.txtResultados.AppendText(result + "\r\n");
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
