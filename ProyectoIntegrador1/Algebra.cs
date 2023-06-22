@@ -56,7 +56,7 @@ namespace ProyectoIntegrador1
 
             }
 
-            string[] string_monomials = string_formula_parts[0].Split('+', '-');
+            //string[] string_monomials = string_formula_parts[0].Split('+', '-');
             string result = "";
 
             string_formula_parts[1] = Regex.Replace(string_formula_parts[1], @"\s+", string.Empty);
@@ -208,7 +208,7 @@ namespace ProyectoIntegrador1
 
                 foreach (Monomial m in f.Monomials)
                 {
-                    row[m.Variable] = double.Parse( m.sign + m.Coefficient.ToString() );
+                    row[m.Variable] = double.Parse(m.sign + m.Coefficient.ToString());
                 }
 
                 this.CoefficientData.Rows.Add(row);
@@ -222,7 +222,8 @@ namespace ProyectoIntegrador1
         //Un arreglo de valores de x
         //Un arreglo de valores de y correspondientes a los valores de x
         //El método devuelve el polinomio interpolador de Lagrange en forma de una cadena de caracteres.
-        //
+        //4
+
         //Este polinomio puede ser utilizado para encontrar el valor interpolado para cualquier valor de x dentro del rango de valores de x dados.
         public string LagrangePolynomial(double[] x, double[] y)
         {
@@ -269,7 +270,7 @@ namespace ProyectoIntegrador1
             double[] b = new double[this.CoefficientData.Rows.Count];
             double[] x0 = new double[this.CoefficientData.Columns.Count];
             double tolerance = 0.01;
-            int maxIterations = 1000;
+            int maxIterations = 100000;
 
             for (int i = 0; i < this.CoefficientData.Rows.Count; i++)
             {
@@ -296,6 +297,45 @@ namespace ProyectoIntegrador1
             }
 
             return result;
+        }
+
+
+        public string SolveUsingParallelJacobis()
+        {
+
+            CreateCoeffientsTable();
+
+            double[,] A = new double[this.CoefficientData.Rows.Count, this.CoefficientData.Columns.Count];
+            double[] b = new double[this.CoefficientData.Rows.Count];
+            double[] x0 = new double[this.CoefficientData.Columns.Count];
+            double tolerance = 0.01;
+            int maxIterations = 1000;
+
+            for (int i = 0; i < this.CoefficientData.Rows.Count; i++)
+            {
+                for (int j = 0; j < this.CoefficientData.Columns.Count; j++)
+                {
+                    double coefficient = 0;
+                    double.TryParse(this.CoefficientData.Rows[i][j].ToString(), out coefficient);
+                    A[i, j] = coefficient;
+                }
+            }
+
+            for (int i = 0; i < this.Formulas.Count; i++)
+            {
+                b[i] = double.Parse(this.Formulas[i].monomial_result.sign + this.Formulas[i].monomial_result.Coefficient.ToString());
+            }
+
+            double[] x = ParallelJacobi(A, b, maxIterations, tolerance);
+
+            List<string> results = new List<string>();
+
+            for (int i = 0; i < x.Length; i++)
+            {
+                results.Add(this.CoefficientData.Columns[i].ColumnName + " = " + x[i]);
+            }
+
+            return JsonConvert.SerializeObject(results, Formatting.Indented);
         }
 
 
@@ -353,7 +393,7 @@ namespace ProyectoIntegrador1
                 for (int i = 0; i < m; i++)
                 {
                     double sum = 0;
-                    for (int j = 0; j < m; j++)
+                    for (int j = 0; j < m; ++j)
                     {
                         if (j != i)
                         {
@@ -373,6 +413,51 @@ namespace ProyectoIntegrador1
                     return x;
                 }
                 x_old = (double[])x.Clone(); // copiar x a x_old para la siguiente iteración
+            }
+
+            Console.WriteLine("Did not converge after {0} iterations.", n);
+            return x;
+        }
+
+
+        public static double[] ParallelJacobi(double[,] A, double[] b, int n, double tol)
+        {
+            int m = A.GetLength(0); // número de filas de A
+            double[] x = new double[m]; // vector inicial
+            double[] x_old = new double[m]; // vector de iteración anterior
+
+            for (int i = 0; i < m; i++)
+            {
+                x_old[i] = x[i] = 0; // inicializar los vectores en 0
+            }
+
+            for (int k = 1; k <= n; k++)
+            {
+                double[] tempX = new double[m];
+                Parallel.For(0, m, i =>
+                {
+                    double sum = 0;
+                    for (int j = 0; j < m; j++)
+                    {
+                        if (j != i)
+                        {
+                            sum += A[i, j] * x_old[j];
+                        }
+                    }
+                    tempX[i] = (b[i] - sum) / A[i, i];
+                });
+
+                double diff = 0;
+                Parallel.For(0, m, i =>
+                {
+                    diff += Math.Abs(tempX[i] - x_old[i]);
+                });
+                if (diff < tol)
+                {
+                    Console.WriteLine("Converged after {0} iterations.", k);
+                    return tempX;
+                }
+                x_old = (double[])tempX.Clone(); // copiar x a x_old para la siguiente iteración
             }
 
             Console.WriteLine("Did not converge after {0} iterations.", n);
@@ -685,7 +770,7 @@ namespace ProyectoIntegrador1
             for (int i = 1; i < n; i++)
             {
                 double xi = a + i * h; // Punto medio de cada subintervalo
-                suma += TestFunction(f,xi);
+                suma += TestFunction(f, xi);
             }
 
             double aproximacion = h * (TestFunction(f, a) + TestFunction(f, b) + 2 * suma) / 2; // Fórmula del método trapezoidal
@@ -704,11 +789,11 @@ namespace ProyectoIntegrador1
             }
 
             double h = (b - a) / n;
-            double sum = TestFunction(f,a) + TestFunction(f,b);
+            double sum = TestFunction(f, a) + TestFunction(f, b);
             for (int i = 1; i < n; i++)
             {
                 double x = a + i * h;
-                sum += 2 * TestFunction(f,x) * (1 + i % 2);
+                sum += 2 * TestFunction(f, x) * (1 + i % 2);
             }
             return sum * h / 3;
         }
@@ -727,7 +812,7 @@ namespace ProyectoIntegrador1
                 for (int i = 1; i <= Math.Pow(2, m - 2); i++)
                 {
                     double x = a + (2 * i - 1) * h;
-                    sum += TestFunction(f,x);
+                    sum += TestFunction(f, x);
                 }
 
                 R[m, 1] = 0.5 * R[m - 1, 1] + h * sum;

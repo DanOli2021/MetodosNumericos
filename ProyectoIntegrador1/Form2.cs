@@ -54,6 +54,7 @@ namespace ProyectoIntegrador1
                 ConsoleWrite("show coefficients - Show the coefficients table.");
                 ConsoleWrite("analize <formula> - Analize a formula.");
                 ConsoleWrite("solve using jacobis - Solve the system using Jacobis method.");
+                ConsoleWrite("solve using parallel jacobis - Solve using the Jacobis method with parallelism.");
                 ConsoleWrite("solve using gauss-seidel - Solve the system using Gauss-Seidel method.");
                 return;
             }
@@ -63,6 +64,13 @@ namespace ProyectoIntegrador1
                 ConsoleWrite(g.SolveUsingJacobis());
                 return;
             }
+
+            if (result.Trim().ToLower().StartsWith("solve using parallel jacobis"))
+            {
+                ConsoleWrite(g.SolveUsingParallelJacobis());
+                return;
+            }
+
 
             if (result.Trim().ToLower().StartsWith("solve using gauss-seidel"))
             {
@@ -123,6 +131,22 @@ namespace ProyectoIntegrador1
             }
 
 
+            if( result.Trim().ToLower().StartsWith( "post to") )
+            {
+                string url = result.Substring(7).Trim();
+                List<string> formulas = new List<string>();
+
+                foreach (Formula item in g.Formulas)
+                {
+                    formulas.Add( item.formula );     
+                }
+
+                ConsoleWrite( SendJsonToUrl(url, JsonConvert.SerializeObject(formulas, Formatting.Indented)) );
+
+                return;
+            }
+
+
             ConsoleWrite("Comando desconocido");
 
         }
@@ -142,8 +166,36 @@ namespace ProyectoIntegrador1
                 textBox1.Focus();
             }
         }
-    }
 
+        public static string SendJsonToUrl(string url, string json)
+        {
+            try
+            {
+
+                HttpClient web = new HttpClient();
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var result = web.PostAsync(url, content).Result;
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("Error: Reason: " + result.ReasonPhrase);
+                    return sb.ToString();
+                }
+
+                var byteArray = result.Content.ReadAsByteArrayAsync().Result;
+                return Encoding.UTF8.GetString(byteArray, 0, byteArray.Length);
+
+            }
+            catch (Exception e)
+            {
+                return $"Error: ReadUrl: {e.ToString()}";
+            }
+
+        }
+
+
+    }
 
 }
 
